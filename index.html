@@ -35,7 +35,24 @@
     <div class="question">
     </div>
     <button id="nextButton" onclick="showNextPair()">Next</button>
+   <div id="imgContainer1" class="image-container">
+        <!-- Image for species 1 will be loaded here by JavaScript -->
+    </div>
+    <div id="image2Container" class="image-container">
+        <!-- Image for species 2 will be loaded here by JavaScript -->
+    </div>
 
+    <!-- Regenerate Buttons -->
+    <button id="regenerateSpecies1" class="regen-button">Regenerate Image for Species 1</button>
+    <button id="regenerateSpecies2" class="regen-button">Regenerate Image for Species 2</button>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden">Loading...</div>
+
+    <!-- Next Button -->
+    <button id="nextButton" class="hidden" onclick="showNextPair()">Next</button>
+
+    <script src="survey.js"></script>
     <script src="survey.js"></script>
 </body>
 </html>

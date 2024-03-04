@@ -128,6 +128,8 @@ const imageUrls = [
 		'species_grids/Ulmus pumila.jpg', 
 		'species_grids/Zelkova serrata.jpg'
 ];
+
+
 let currentPairIndex = 0;
 const totalPairs = imageUrls.length / 2;
 const responses = [];
@@ -252,6 +254,45 @@ function finishSurvey() {
     document.getElementById('nextButton').style.display = 'none';
 }
 
+function getRandomImage(species) {
+    var images = speciesImages[species];
+    return images[Math.floor(Math.random() * images.length)];
+}
+
+function showSpeciesPair(species1, species2) {
+    var img1 = getRandomImage(species1);
+    var img2 = getRandomImage(species2);
+    
+    // Code to update the DOM with the new images
+    document.getElementById('image1Container').src = img1;
+    document.getElementById('image2Container').src = img2;
+}
+
+function replaceImageForSpecies(species) {
+    var newImg = getRandomImage(species);
+    var containerId = (species === 'species1') ? 'image1Container' : 'image2Container';
+    document.getElementById(containerId).src = newImg;
+}
+
+// When the respondent wants to see another image for a species
+document.getElementById('seeAnotherImage1').addEventListener('click', function() {
+    replaceImageForSpecies('species1');
+});
+
+document.getElementById('seeAnotherImage2').addEventListener('click', function() {
+    replaceImageForSpecies('species2');
+});
+
 // Initialize the survey by showing the first pair
 shuffleArray(imageUrls);
 showImagePair(currentPairIndex);
+fetch('speciesImagePaths.json')
+    .then(response => response.json())
+    .then(data => {
+        // Now 'data' contains the object with species as keys and image arrays as values
+        var speciesImages = data;
+        // You can now use 'speciesImages' in your code as shown in the previous examples
+    })
+    .catch(error => {
+        console.error('Error loading species image paths:', error);
+    });
