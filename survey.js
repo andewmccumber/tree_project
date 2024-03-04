@@ -134,7 +134,7 @@ const responses = [];
 function createRadioButtons(container) {
     const questionDiv = document.createElement('div');
     questionDiv.className = 'question';
-    questionDiv.textContent = 'Do these images show the same type of tree?';
+    questionDiv.textContent = 'Do the trees in the image on the left look like the same type of tree as those in the image on the right?';
     
     const yesLabel = document.createElement('label');
     yesLabel.textContent = 'Yes';
