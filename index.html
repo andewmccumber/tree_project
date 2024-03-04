@@ -6,16 +6,21 @@
     <style>
         .image-container {
             display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
+            justify-content: space-around; /* Distribute space around items */
+            flex-wrap: wrap; /* Allow items to wrap as needed */
+            margin-bottom: 20px; /* Add some space between images and the question */
         }
         .image-container img {
             border: 2px solid black; /* Black border around images */
-            margin: 10px; /* Some space around images */
+            max-width: 98%; /* Maximum width of each image is 48% of the container */
+            max-height: 400px; /* Maximum height of each image */
+            width: auto; /* Maintain aspect ratio */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 10px; /* Space below the images */
         }
         .question {
             text-align: center;
-            margin-bottom: 10px;
+            width: 100%; /* Ensure the question takes the full width */
         }
         .hidden {
             display: none;
@@ -24,12 +29,14 @@
 </head>
 <body>
     <h2>Tree Grid Image Survey</h2>
-    <div id="surveyContainer">
-        <!-- Image pairs and question will be injected here by JavaScript -->
+    <div id="surveyContainer" class="image-container">
+        <!-- Image pairs will be injected here by JavaScript -->
     </div>
-    <div>
-        <button id="nextButton" class="hidden" onclick="showNextPair()">Next</button>
+    <div class="question">
+        <label><input type="radio" name="pair_choice" value="yes"> Yes</label>
+        <label><input type="radio" name="pair_choice" value="no"> No</label>
     </div>
+    <button id="nextButton" onclick="showNextPair()">Next</button>
 
     <script src="survey.js"></script>
 </body>
