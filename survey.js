@@ -129,6 +129,7 @@ const imageUrls = [
 		'species_grids/Zelkova serrata.jpg'
 ];
 let currentPairIndex = 0;
+const totalPairs = imageUrls.length / 2;
 const responses = [];
 
 function shuffleArray(array) {
@@ -188,47 +189,67 @@ function showImagePair(index) {
 }
 
 function showNextPair() {
+    // Get the user's choice
     const selectedValue = document.querySelector('input[name="pair_choice"]:checked')?.value;
     
-    if (!selectedValue) {
-        alert('Please make a selection before proceeding.');
-        return;
-    }
+    // If a choice was made, send the response
+    if (selectedValue) {
+        // Construct an object with the pair of image filenames and the user's choice
+        const currentPair = {
+            images: [imageUrls[currentPairIndex * 2], imageUrls[currentPairIndex * 2 + 1]],
+            choice: selectedValue
+        };
 
-    responses.push({
-        pairIndex: currentPairIndex,
-        response: selectedValue
-    });
+        // Send the data to the server
+        sendDataToServer(currentPair);
 
-    currentPairIndex++;
-    
-    if (currentPairIndex < imageUrls.length / 2) {
-        showImagePair(currentPairIndex);
+        // Increment the pair index to show the next pair
+        currentPairIndex++;
+
+        // If we have shown all pairs, finish the survey
+        if (currentPairIndex >= totalPairs) {
+            finishSurvey();
+        } else {
+            // Otherwise, show the next pair
+            showImagePair(currentPairIndex);
+        }
     } else {
-        finishSurvey();
+        alert('Please make a selection before proceeding.');
     }
-    
-    document.getElementById('nextButton').classList.remove('hidden');
 }
 
-function finishSurvey() {
-    console.log(responses);
-    alert('Thank you for completing the survey!');
-    document.getElementById('surveyContainer').innerHTML = '<p>Thank you for participating!</p>';
-    
-        fetch('https://script.google.com/macros/s/AKfycbxI0iwOr1a67gB_-XLcQTWxvwmpLj4_kUwR_YbeYgRSqAyR6VKTp6VIoIDuK93bjyZa/exec', {
+function sendDataToServer(pairData) {
+    // Convert the image filenames and choice into a format suitable for the server
+    const postData = {
+        image1: pairData.images[0],
+        image2: pairData.images[1],
+        choice: pairData.choice
+    };
+
+    fetch('https://script.google.com/macros/s/AKfycbxLz5hOaWNi9Nxxt5f1XxbAO4AIRD9_6lrd4PKmnYdVuOoqDRk1jcTICLQYremWE87P/exec', {
         method: 'POST',
-        mode: 'no-cors', // Note: no-cors will prevent reading the response
-        body: JSON.stringify(answers),
+        mode: 'no-cors',
+        body: JSON.stringify(postData),
         headers: {
             'Content-Type': 'application/json',
         },
     }).then(response => {
-        alert('Survey submitted successfully!');
-        // Optionally, redirect or clear the form here
+        console.log('Data sent to the server successfully.');
     }).catch(error => {
-        console.error('Error submitting form:', error);
+        console.error('Error sending data to the server:', error);
     });
+}
+
+function finishSurvey() {
+    // Here you can handle the end of the survey, such as sending the responses to a server
+    // For now, we'll just log them to the console and alert the user
+    console.log(responses);
+    alert('Thank you for completing the survey!');
+
+    // Optionally, you could redirect to another page or hide the survey and show a thank you message
+    const surveyContainer = document.getElementById('surveyContainer');
+    surveyContainer.innerHTML = '<p>Thank you for participating!</p>';
+    document.getElementById('nextButton').style.display = 'none';
 }
 
 // Initialize the survey by showing the first pair
