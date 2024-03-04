@@ -128,57 +128,82 @@ const imageUrls = [
 		'species_grids/Ulmus pumila.jpg', 
 		'species_grids/Zelkova serrata.jpg'
 ];
+let currentPairIndex = 0;
+const responses = [];
 
-// Shuffle array and pick the first 60 images (30 pairs)
-const shuffledImages = imageUrls.sort(() => 0.5 - Math.random()).slice(0, 60);
-
-// Function to dynamically create survey questions
-function createSurveyQuestions() {
-    const form = document.getElementById('surveyForm');
+function createRadioButtons(container) {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question';
+    questionDiv.textContent = 'Do these images show the same type of tree?';
     
-    for (let i = 0; i < shuffledImages.length; i += 2) {
-        const container = document.createElement('div');
-        container.className = 'image-pair-container';
-        
-        const img1 = document.createElement('img');
-        img1.src = shuffledImages[i];
-        const img2 = document.createElement('img');
-        img2.src = shuffledImages[i + 1];
-        
-        const question = document.createElement('div');
-        question.className = 'question';
-        question.innerText = 'Do these images show the same type of tree?';
-        
-        const select = document.createElement('select');
-        select.name = `answer_${i / 2}`;
-        const optionYes = new Option('Yes', 'yes');
-        const optionNo = new Option('No', 'no');
-        select.add(optionYes);
-        select.add(optionNo);
-        
-        container.appendChild(img1);
-        container.appendChild(img2);
-        container.appendChild(question);
-        container.appendChild(select);
-        
-        form.appendChild(container);
-    }
+    const yesLabel = document.createElement('label');
+    yesLabel.textContent = 'Yes';
+    const yesInput = document.createElement('input');
+    yesInput.type = 'radio';
+    yesInput.name = 'pair_choice';
+    yesInput.value = 'yes';
+    yesLabel.prepend(yesInput);
+
+    const noLabel = document.createElement('label');
+    noLabel.textContent = 'No';
+    const noInput = document.createElement('input');
+    noInput.type = 'radio';
+    noInput.name = 'pair_choice';
+    noInput.value = 'no';
+    noLabel.prepend(noInput);
+    
+    container.appendChild(questionDiv);
+    container.appendChild(yesLabel);
+    container.appendChild(noLabel);
 }
 
-// Function to handle form submission
-function submitResponses() {
-    const form = document.getElementById('surveyForm');
-    const formData = new FormData(form);
-    const answers = {};
-    for (let [name, value] of formData.entries()) {
-        answers[name] = value;
+function showImagePair(index) {
+    const surveyContainer = document.getElementById('surveyContainer');
+    surveyContainer.innerHTML = ''; // Clear the previous images
+
+    const img1 = document.createElement('img');
+    img1.src = imageUrls[index * 2];
+    const img2 = document.createElement('img');
+    img2.src = imageUrls[index * 2 + 1];
+    
+    surveyContainer.appendChild(img1);
+    surveyContainer.appendChild(img2);
+
+    createRadioButtons(surveyContainer);
+    
+    document.getElementById('nextButton').classList.remove('hidden');
+}
+
+function showNextPair() {
+    const selectedValue = document.querySelector('input[name="pair_choice"]:checked')?.value;
+    
+    if (!selectedValue) {
+        alert('Please make a selection before proceeding.');
+        return;
+    }
+
+    responses.push({
+        pairIndex: currentPairIndex,
+        response: selectedValue
+    });
+
+    currentPairIndex++;
+    
+    if (currentPairIndex < imageUrls.length / 2) {
+        showImagePair(currentPairIndex);
+    } else {
+        finishSurvey();
     }
     
-    // Here you'll send `answers` to your server or Google Apps Script
-    console.log(answers); // For testing purposes
+    document.getElementById('nextButton').classList.add('hidden');
+}
+
+function finishSurvey() {
+    console.log(responses);
+    alert('Thank you for completing the survey!');
+    document.getElementById('surveyContainer').innerHTML = '<p>Thank you for participating!</p>';
     
-    // Replace the URL below with your Google Apps Script web app URL
-    fetch('https://script.google.com/macros/s/AKfycbxI0iwOr1a67gB_-XLcQTWxvwmpLj4_kUwR_YbeYgRSqAyR6VKTp6VIoIDuK93bjyZa/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbxI0iwOr1a67gB_-XLcQTWxvwmpLj4_kUwR_YbeYgRSqAyR6VKTp6VIoIDuK93bjyZa/exec', {
         method: 'POST',
         mode: 'no-cors', // Note: no-cors will prevent reading the response
         body: JSON.stringify(answers),
@@ -193,5 +218,5 @@ function submitResponses() {
     });
 }
 
-// Initialize the survey questions when the page loads
-window.onload = createSurveyQuestions;
+// Initialize the survey by showing the first pair
+showImagePair(currentPairIndex);

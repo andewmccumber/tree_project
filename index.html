@@ -4,23 +4,32 @@
     <meta charset="UTF-8">
     <title>Tree Grid Image Survey</title>
     <style>
-        .image-pair-container {
+        .image-container {
             display: flex;
             justify-content: space-around;
             margin-bottom: 20px;
+        }
+        .image-container img {
+            border: 2px solid black; /* Black border around images */
+            margin: 10px; /* Some space around images */
         }
         .question {
             text-align: center;
             margin-bottom: 10px;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <h2>Tree Grid Image Survey</h2>
-    <form id="surveyForm">
-        <!-- Image pairs will be injected here by JavaScript -->
-    </form>
-    <button onclick="submitResponses()">Submit</button>
+    <div id="surveyContainer">
+        <!-- Image pairs and question will be injected here by JavaScript -->
+    </div>
+    <div>
+        <button id="nextButton" class="hidden" onclick="showNextPair()">Next</button>
+    </div>
 
     <script src="survey.js"></script>
 </body>
