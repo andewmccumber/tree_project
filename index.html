@@ -2,57 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tree Grid Image Survey</title>
+    <title>Species Image Comparison Survey</title>
     <style>
-        .image-container {
-            display: flex;
-            justify-content: space-around; /* Distribute space around items */
-            flex-wrap: wrap; /* Allow items to wrap as needed */
-            margin-bottom: 20px; /* Add some space between images and the question */
-        }
         .image-container img {
-            border: 2px solid black; /* Black border around images */
-            max-width: 98%; /* Maximum width of each image is 48% of the container */
-            max-height: 400px; /* Maximum height of each image */
-            width: auto; /* Maintain aspect ratio */
+            border: 2px solid black; /* Style for image borders */
+            width: 200px; /* Adjust as needed */
             height: auto; /* Maintain aspect ratio */
-            margin-bottom: 10px; /* Space below the images */
         }
-        .question {
-            text-align: center;
-            width: 100%; /* Ensure the question takes the full width */
-        }
-        .hidden {
-            display: none;
-        }
+        /* Additional styles as necessary */
     </style>
 </head>
 <body>
-    <h2>Tree Grid Image Survey</h2>
-    <div id="surveyContainer" class="image-container">
-        <!-- Image pairs will be injected here by JavaScript -->
-    </div>
-    <div class="question">
-    </div>
-    <button id="nextButton" onclick="showNextPair()">Next</button>
-   <div id="imgContainer1" class="image-container">
-        <!-- Image for species 1 will be loaded here by JavaScript -->
+    <h2>Species Image Comparison Survey</h2>
+    
+    <!-- Image Containers for Displaying Species Images -->
+    <div id="image1Container" class="image-container">
+        <!-- Image for first species will be dynamically inserted here -->
     </div>
     <div id="image2Container" class="image-container">
-        <!-- Image for species 2 will be loaded here by JavaScript -->
+        <!-- Image for second species will be dynamically inserted here -->
     </div>
-
-    <!-- Regenerate Buttons -->
-    <button id="regenerateSpecies1" class="regen-button">Regenerate Image for Species 1</button>
-    <button id="regenerateSpecies2" class="regen-button">Regenerate Image for Species 2</button>
-
-    <!-- Loading Indicator -->
-    <div id="loadingIndicator" class="hidden">Loading...</div>
-
-    <!-- Next Button -->
-    <button id="nextButton" class="hidden" onclick="showNextPair()">Next</button>
-
-    <script src="survey.js"></script>
+    
+    <!-- Buttons for Regenerating Images for Each Species -->
+    <button id="regenerateSpecies1">Regenerate Image for Species 1</button>
+    <button id="regenerateSpecies2">Regenerate Image for Species 2</button>
+    
     <script src="survey.js"></script>
 </body>
 </html>
