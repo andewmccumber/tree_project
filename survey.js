@@ -131,10 +131,17 @@ const imageUrls = [
 let currentPairIndex = 0;
 const responses = [];
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+  }
+}
+
 function createRadioButtons(container) {
     const questionDiv = document.createElement('div');
     questionDiv.className = 'question';
-    questionDiv.textContent = 'Do both these images show the same type of tree?';
+    questionDiv.textContent = 'Do both these images show the same type of tree/plant?';
     
     const yesLabel = document.createElement('label');
     yesLabel.textContent = 'Yes';
@@ -161,16 +168,22 @@ function showImagePair(index) {
     const surveyContainer = document.getElementById('surveyContainer');
     surveyContainer.innerHTML = ''; // Clear the previous images
 
+    const imgContainer1 = document.createElement('div');
+    imgContainer1.className = 'image-container';
     const img1 = document.createElement('img');
     img1.src = imageUrls[index * 2];
+    imgContainer1.appendChild(img1);
+    
+    const imgContainer2 = document.createElement('div');
+    imgContainer2.className = 'image-container';
     const img2 = document.createElement('img');
     img2.src = imageUrls[index * 2 + 1];
-    
-    surveyContainer.appendChild(img1);
-    surveyContainer.appendChild(img2);
+    imgContainer2.appendChild(img2);
+
+    surveyContainer.appendChild(imgContainer1);
+    surveyContainer.appendChild(imgContainer2);
 
     createRadioButtons(surveyContainer);
-    
     document.getElementById('nextButton').classList.remove('hidden');
 }
 
@@ -195,7 +208,7 @@ function showNextPair() {
         finishSurvey();
     }
     
-    document.getElementById('nextButton').classList.add('hidden');
+    document.getElementById('nextButton').classList.remove('hidden');
 }
 
 function finishSurvey() {
@@ -219,4 +232,5 @@ function finishSurvey() {
 }
 
 // Initialize the survey by showing the first pair
+shuffleArray(imageUrls);
 showImagePair(currentPairIndex);
